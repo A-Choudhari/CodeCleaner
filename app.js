@@ -37,7 +37,30 @@ app.octokit.log.debug(`Authenticated as '${data.name}'`)
 
 // Subscribe to the "pull_request.opened" webhook event
 app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
-  console.log(`Received a pull request event for #${payload.pull_request}`)
+  console.log(`Received a pull request event for #${payload.pull_request.head}`)
+  
+  const owner = payload.repository.owner.login;
+  const repo = payload.repository.name;
+  const pull_number = payload.pull_request.number;
+
+  try {
+    // Fetch the list of files changed in the PR
+    const { data: files } = await octokit.rest.pulls.listFiles({
+      owner,
+      repo,
+      pull_number
+    });
+
+    console.log(`Files changed in PR #${pull_number}:`);
+    
+    for (const file of files) {
+      console.log(`- ${file.filename} (${file.status})`);
+      console.log(`  Changes: ${file.changes}`);
+      console.log(`  Patch:\n${file.patch}\n`);
+    }
+  } catch (error) {
+    console.error(`Error fetching file changes: ${error.message}`);
+  }
   try {
     await octokit.rest.issues.createComment({
       owner: payload.repository.owner.login,
