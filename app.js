@@ -58,10 +58,10 @@ app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
     console.log(`Files changed in PR #${pull_number}:`);
     const changes_list = [];
     for (const file of files) {
-      dictionary_file = {"File Info": `${file.filename} (${file.status})`, "Changes":`${file.changes}`, "Patch":`${file.patch}`};
       console.log(`- ${file.filename} (${file.status})`);
       console.log(`  Changes: ${file.changes}`);
       console.log(`  Patch:\n${file.patch}\n`);
+      let dictionary_file = {"File Info": `${file.filename} (${file.status})`, "Changes":`${file.changes}`, "Patch":`${file.patch}`};
       changes_list.push(dictionary_file);
     }
     const completion = openai.chat.completions.create({
