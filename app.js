@@ -54,7 +54,7 @@ app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
       repo,
       pull_number
     });
-
+    // hello i am just adding a comment for testing 
     console.log(`Files changed in PR #${pull_number}:`);
     const changes_list = [];
     for (const file of files) {
@@ -69,7 +69,7 @@ app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
       store: true,
       messages: [
         {"role": "user", "content":
-           `You are a senior software developer. Analyze these PR changes that have been made into the repository. Provide your response in 3 sections. First, provide a summary about what all of the changes will achieve for the project. This should be a concicse summary that should be direct and explain all the integrations/logic that is executed. In the next section, you need to discuss changes of concern. Start  by mentioning the file name and below that add the line of concern. After the line of code, explain on the next line on why this might be an issue. Be quantitative and specific. Here are all the changes that have been made for the PR: ${changes_list} `},
+           `You are a senior software developer. Analyze these PR changes that have been made into the repository. Provide your response in 3 sections. First, provide a summary about what all of the changes will achieve for the project. This should be a concise statement that should be direct and explain all the integrations/logic that is executed. In the next section, you need to discuss changes of concern. Start  by mentioning the file name and below that add the line of concern. After the line of code, explain on the next line on why this logic might be flawed. Be quantitative and specific. Here are all the changes that have been made for the PR: ${changes_list} `},
       ],
     });
     completion.then((result) => {
